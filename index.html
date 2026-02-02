@@ -7,8 +7,25 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="stars"></div>
+    
     <div class="container">
-        <h1>I am a Student</h1>
+        <div class="text-wrapper">
+            <h1 class="animated-text" id="line1">I am a Student</h1>
+            <h2 class="animated-text" id="line2">Learning Web Development</h2>
+            <p class="animated-text" id="line3">Building awesome projects!</p>
+        </div>
+        
+        <div class="cursor"></div>
+        
+        <div class="controls">
+            <button class="btn" id="playBtn">▶ Play</button>
+            <button class="btn" id="resetBtn">↻ Reset</button>
+        </div>
+        
+        <div class="info">
+            Press SPACE or click Play to start animation
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

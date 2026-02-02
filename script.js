@@ -1,30 +1,62 @@
-const elem1 = document.querySelector('.container h1');
-const text1 = 'I am a Student';
-let index1 = 0;
-let displayedText = '';
-let isAnimating = false;
+const texts = [
+    { elem: document.getElementById('line1'), text: 'I am a Student', speed: 80 },
+    { elem: document.getElementById('line2'), text: 'Learning Web Development', speed: 60 },
+    { elem: document.getElementById('line3'), text: 'Building awesome projects!', speed: 70 }
+];
 
-function autoText1() {
-    if (index1 < text1.length) {
-        displayedText += text1.charAt(index1);
-        elem1.textContent = displayedText;
-        index1++;
-        setTimeout(autoText1, 100);
-    } else {
-        isAnimating = false;
+const cursor = document.querySelector('.cursor');
+const playBtn = document.getElementById('playBtn');
+const resetBtn = document.getElementById('resetBtn');
+
+let isAnimating = false;
+let animationIndices = [0, 0, 0];
+let displayedTexts = ['', '', ''];
+
+function animateTexts() {
+    if (isAnimating) return;
+    
+    isAnimating = true;
+    playBtn.disabled = true;
+    cursor.style.display = 'block';
+    
+    function animateLine(lineIndex) {
+        if (animationIndices[lineIndex] < texts[lineIndex].text.length) {
+            displayedTexts[lineIndex] += texts[lineIndex].text.charAt(animationIndices[lineIndex]);
+            texts[lineIndex].elem.textContent = displayedTexts[lineIndex];
+            animationIndices[lineIndex]++;
+            
+            setTimeout(() => animateLine(lineIndex), texts[lineIndex].speed);
+        } else if (lineIndex < texts.length - 1) {
+            setTimeout(() => animateLine(lineIndex + 1), 500);
+        } else {
+            cursor.style.display = 'none';
+            isAnimating = false;
+            playBtn.disabled = false;
+        }
     }
+    
+    animateLine(0);
 }
 
-elem1.addEventListener('click', function() {
-    if (!isAnimating) {
-        isAnimating = true;
-        index1 = 0;
-        displayedText = '';
-        elem1.textContent = '';
-        autoText1();
+function resetAnimation() {
+    isAnimating = false;
+    animationIndices = [0, 0, 0];
+    displayedTexts = ['', '', ''];
+    texts.forEach(item => item.elem.textContent = '');
+    cursor.style.display = 'none';
+    playBtn.disabled = false;
+}
+
+playBtn.addEventListener('click', animateTexts);
+resetBtn.addEventListener('click', resetAnimation);
+
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault();
+        animateTexts();
     }
 });
 
 window.addEventListener('load', function() {
-    autoText1();
-});    
+    animateTexts();
+});
